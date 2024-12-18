@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add to Cart</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            background-image: url(https://t4.ftcdn.net/jpg/04/43/37/07/360_F_443370711_sqHRnSIQovW6uyQ5ZwDpd4kjCG8Q6swm.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .products {
+            display: flex;
+            gap: 22px;
+        }
+
+        .product {
+            background-color: #bc7878;
+            padding: 12px;
+            border: 1px solid #807c72;
+            text-align: center;
+            width: 24%;
+            height: 410px;
+            border-radius: 25px;
+            background: transparent;
+            color: white;
+        }
+
+        .product button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        .product button:hover {
+            background-color: #45a049;
+        }
+
+        .cart {
+            margin-top: 50px;
+            background-color: #fff;
+            border: 1px solid #807c72;
+            text-align: center;
+            width: 14%;
+            border-radius: 22px;
+            background-color: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+
+        #cart-items {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #cart-items li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="products">
+        <div class="product">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgENiGZeX66lfZ5aKfGqgFU14L_u73hSPosTYQ5YNVuSJVc5ZSdLdVyA1UsS42lEZCG5L5VOStVG3g7Rmg3NipGzQr2P-T_iVRHZGKBEzlar9rlqX1Go3paM1-kgNqAZ4SDx4dkZ9_bogs/s1600/pizza-love.gif" height="250px" width="100%">
+            <h3>P I Z Z A</h3>
+            <p>Price: $10</p>
+            <button class="add-to-cart" data-id="1" data-name="Product 1" data-price="10">Add to Cart</button>
+        </div>
+
+        <div class="product">
+            <img src="https://c.ndtvimg.com/2022-06/gp4k2jro_burgers_625x300_20_June_22.jpg?im=FeatureCrop,algorithm=dnn,width=620,height=350?im=FaceCrop,algorithm=dnn,width=1200,height=886" height="250px" width="100%">
+            <h3>B U R G E R</h3>
+            <p>Price: $20</p>
+            <button class="add-to-cart" data-id="2" data-name="Product 2" data-price="20">Add to Cart</button>
+        </div>
+
+        <div class="product">
+            <img src="https://images2.alphacoders.com/129/1294747.jpg" height="250px" width="100%">
+            <h3>S A N D W H I C H</h3>
+            <p>Price: $30</p>
+            <button class="add-to-cart" data-id="3" data-name="Product 3" data-price="30">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="cart">
+        <h2>Your Cart</h2>
+        <ul id="cart-items"></ul>
+        <p>Total: $<span id="total-price">0</span></p>
+        <button style="background-color: #51504a; color: white; height: 33px; border-radius: 30px;width: 41%; border: none; "id="Delete-item ">Delete all</button>
+    </div>
+
+    <script>
+        function updateCart() {
+            const cartItemsList = document.getElementById('cart-items');
+            const totalPriceElement = document.getElementById('total-price');
+            const cart = getCart();
+
+            cartItemsList.innerHTML = '';
+
+            let totalPrice = 0;
+            cart.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${item.name} - $${item.price}`;
+                cartItemsList.appendChild(listItem);
+                totalPrice += item.price;
+            });
+
+            totalPriceElement.textContent = totalPrice;
+        }
+
+        function addToCart(event) {
+            const productId = event.target.getAttribute('data-id');
+            const productName = event.target.getAttribute('data-name');
+            const productPrice = parseFloat(event.target.getAttribute('data-price'));
+
+            const product = {
+                id: productId,
+                name: productName,
+                price: productPrice
+            };
+
+            const cart = getCart();
+            cart.push(product);
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            updateCart();
+        }
+
+        function getCart() {
+            const cart = JSON.parse(localStorage.getItem('cart'));
+            return cart ? cart : [];
+        }
+
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', addToCart);
+        });
+
+        document.addEventListener('DOMContentLoaded', updateCart);
+
+        let deleteallitem = document.getElementById('Delete-item')
+        deleteallitem.addEventListener('click', function () {
+            window.location.reload()
+            localStorage.clear()
+        })
+    </script>
+</body>
+</html>
